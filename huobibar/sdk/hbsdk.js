@@ -65,11 +65,11 @@ function call_api(method, path, payload, body) {
                     // console.log(json.data);
                     resolve(json.data);
                 } else {
-                    console.log('调用错误', json);
+                    // console.log('调用错误', json);
                     resolve(null);
                 }
             }).catch(ex => {
-                console.log(method, path, '异常', ex);
+                // console.log(method, path, '异常', ex);
                 resolve(null);
             });
         } else if (method == 'POST') {
@@ -82,11 +82,11 @@ function call_api(method, path, payload, body) {
                     // console.log(json.data);
                     resolve(json.data);
                 } else {
-                    console.log('调用错误', json);
+                    // console.log('调用错误', json);
                     resolve(null);
                 }
             }).catch(ex => {
-                console.log(method, path, '异常', ex);
+                // console.log(method, path, '异常', ex);
                 resolve(null);
             });
         }
@@ -159,7 +159,7 @@ var HUOBI_PRO = {
             if (payment_id) {
                 body['addr-tag'] = payment_id;
             } else {
-                console.log('huobi withdrawal', coin, 'no payment id provided, cancel withdrawal');
+                // console.log('huobi withdrawal', coin, 'no payment id provided, cancel withdrawal');
                 return Promise.resolve(null);
             }
         }

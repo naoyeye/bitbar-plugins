@@ -15,10 +15,10 @@ const huobibar = require('./huobibar');
 huobibar.run(function(finance) {
   bitbar([
     {
-      text: finance,
+      text: finance || '出错了',
       color: bitbar.darkMode ? '#55fd13' : '#333333',
       font: 'Source Code Pro',
-      size: 13,
+      size: 15,
       length: 7,
       dropdown: false
     },

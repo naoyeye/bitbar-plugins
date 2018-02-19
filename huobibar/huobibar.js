@@ -7,18 +7,12 @@ let btcusdt = 0
 let usdCnyRate = 0
 
 function getLastestBTCUSDT() {
-    // https://api.huobi.pro/market/history/kline?period=1min&size=1&symbol=btcusdt
     return new Promise((resolve, reject) => {
         let url = `https://api.huobi.pro/market/history/kline?period=1min&size=1&symbol=btcusdt`;
         http.get(url, {
             timeout: 1000,
             gzip: true
         }).then(resp => {
-            // // console.log(data);
-            // let json = JSON.parse(data);
-            // let t = json.ts;
-            // let asks = json.tick.asks;
-            // let bids = json.tick.bids;
             let json = JSON.parse(resp);
 
             if (json.status === 'ok') {
@@ -28,7 +22,6 @@ function getLastestBTCUSDT() {
                 resolve(null);
             }
         }).catch(ex => {
-            // console.log(coin, currency, ex);
             resolve(null);
         });
     });
@@ -49,7 +42,6 @@ function getLatestUsdCnyRate() {
                 resolve(null);
             }
         }).catch(ex => {
-            // console.log(coin, currency, ex);
             resolve(null);
         });
     })
@@ -66,24 +58,39 @@ function run(callback) {
     // 把get_account获取到的type=spot的id填写到:
     // default.json中的${account_id_pro}中去
 
-    // 第二步，获取Balance和OpenOrders
-    hbsdk.get_balance().then((data, b, c)=>{
+    // 第二步，获取Balance
+    hbsdk.get_balance().then((data)=>{
+        if (!data) {
+            callback && callback()
+            return
+        }
         data.list.map((item) => {
             if (item.currency === 'btc' && item.type === 'trade') {
                 myBalance = item.balance
             }
         })
 
+        // 获取比特币美元汇率
         getLastestBTCUSDT().then(closePrice => {
             btcusdt = closePrice
 
+            // 获取人民币美元汇率
             getLatestUsdCnyRate().then(latestUsdCnyRate => {
                 usdCnyRate = latestUsdCnyRate
                 let myFinance = `￥${(myBalance * btcusdt * usdCnyRate).toFixed(0)}`
 
                 callback && callback(myFinance)
-            })
-        })
+            }).catch(ex => {
+                callback && callback('获取人民币美元汇率出错')
+                return
+            });
+        }).catch(ex => {
+            callback && callback('获取比特币美元汇率出错')
+            return
+        });
+    }).catch(ex => {
+        callback && callback('获取账户比特币资产出错')
+        return
     });
 
 
