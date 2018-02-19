@@ -1,0 +1,8 @@
+
+config/default.json
+
+# osx noise
+.DS_Store
+profile
+build
+node_modules

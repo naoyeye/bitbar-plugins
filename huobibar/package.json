@@ -1,0 +1,16 @@
+{
+  "name": "huobibar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "huobibar.js",
+  "author": "hanjiyun",
+  "license": "MIT",
+  "dependencies": {
+    "bitbar": "^0.3.0",
+    "bluebird": "^3.3.1",
+    "config": "^1.28.1",
+    "crypto-js": "^3.1.9-1",
+    "moment": "^2.13.0",
+    "request": "^2.72.0"
+  }
+}
