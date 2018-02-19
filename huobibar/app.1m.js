@@ -12,33 +12,26 @@
 const bitbar = require('bitbar');
 const huobibar = require('./huobibar');
 
-huobibar.run(function(finance) {
+huobibar.run(function(myFinance, myBalance, btcusdt, usdCnyRate) {
   bitbar([
     {
-      text: finance || '出错了',
+      text: myFinance || '出错了',
       color: bitbar.darkMode ? '#55fd13' : '#333333',
       font: 'Source Code Pro',
       size: 15,
-      length: 7,
+      length: 10,
       dropdown: false
     },
-    // bitbar.sep,
-    // {
-    //   text: 'Unicorns',
-    //   color: '#ff79d7',
-    //   submenu: [
-    //     {
-    //       text: ':tv: Video',
-    //       href: 'https://www.youtube.com/watch?v=9auOCbH5Ns4'
-    //     },
-    //     {
-    //       text: ':book: Wiki',
-    //       href: 'https://en.wikipedia.org/wiki/Unicorn'
-    //     }
-    //   ]
-    // },
-    // bitbar.sep,
-    // 'Ponies'
+    bitbar.sep,
+    `我有几个币：${parseFloat(myBalance).toFixed(8)}`,
+    `BTC/USDT：${btcusdt}`,
+    `美元人民币：${usdCnyRate}`,
+    bitbar.sep,
+    {
+      text: '查看行情',
+      color: 'green',
+      href: 'https://www.huobi.pro/zh-cn/coin_coin/exchange/#btc_usdt'
+    }
   ]);
 });
 

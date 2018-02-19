@@ -79,7 +79,7 @@ function run(callback) {
                 usdCnyRate = latestUsdCnyRate
                 let myFinance = `￥${(myBalance * btcusdt * usdCnyRate).toFixed(0)}`
 
-                callback && callback(myFinance)
+                callback && callback(myFinance, myBalance, btcusdt, usdCnyRate)
             }).catch(ex => {
                 callback && callback('获取人民币美元汇率出错')
                 return
