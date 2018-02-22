@@ -9,13 +9,25 @@
 // <bitbar.dependencies>node.js bluebird config crypto-js moment request</bitbar.dependencies>
 
 
-const bitbar = require('bitbar');
-const huobibar = require('./huobibar');
+const bitbar = require('bitbar')
+const huobibar = require('./huobibar')
 
-huobibar.run(function(myFinance, myBalance, btcusdt, usdCnyRate) {
+let coinList = ''
+
+huobibar.run(function(total, myBalance, usdCnyRate) {
+
+  myBalance.map((item) => {
+    coinList += `我有 ${parseFloat(item.balance).toFixed(8)} 个 ${item.currency} 币\n价值 ${item.balance * item.price * usdCnyRate} 元\n${item.currency.toUpperCase()}/USDT：$${item.price}\n`
+  })
+
+  if (!total) {
+    return
+  }
+
+
   bitbar([
     {
-      text: myFinance || '出错了',
+      text: total || '出错了',
       color: bitbar.darkMode ? '#55fd13' : '#333333',
       font: 'Source Code Pro',
       size: 15,
@@ -23,8 +35,10 @@ huobibar.run(function(myFinance, myBalance, btcusdt, usdCnyRate) {
       dropdown: false
     },
     bitbar.sep,
-    `我有几个币：${parseFloat(myBalance).toFixed(8)}`,
-    `BTC/USDT：${btcusdt}`,
+    {
+      text: coinList
+    },
+    bitbar.sep,
     `美元人民币：${usdCnyRate}`,
     bitbar.sep,
     {
@@ -32,6 +46,6 @@ huobibar.run(function(myFinance, myBalance, btcusdt, usdCnyRate) {
       color: 'green',
       href: 'https://www.huobi.pro/zh-cn/coin_coin/exchange/#btc_usdt'
     }
-  ]);
-});
+  ])
+})
 

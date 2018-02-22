@@ -1,14 +1,17 @@
+/* eslint-disable */
 
 const hbsdk = require('./sdk/hbsdk');
 const http = require('./framework/httpClient');
 
-let myBalance = 0
-let btcusdt = 0
+let myBalance = []
+let btcusdt = []
 let usdCnyRate = 0
+let total = 0
+let finish = 0
 
-function getLastestBTCUSDT() {
+function getLastestPrice(symbol) {
     return new Promise((resolve, reject) => {
-        let url = `https://api.huobi.pro/market/history/kline?period=1min&size=1&symbol=btcusdt`;
+        let url = `https://api.huobi.pro/market/history/kline?period=1min&size=1&symbol=${symbol}`;
         http.get(url, {
             timeout: 1000,
             gzip: true
@@ -57,41 +60,54 @@ function run(callback) {
     hbsdk.get_account().then();
     // 把get_account获取到的type=spot的id填写到:
     // default.json中的${account_id_pro}中去
+    
+    // 获取人民币美元汇率
+    getLatestUsdCnyRate().then(latestUsdCnyRate => {
+        usdCnyRate = latestUsdCnyRate
+    }).catch(ex => {
+        callback && callback('获取人民币美元汇率出错', myBalance, usdCnyRate)
+        return
+    });
 
     // 第二步，获取Balance
     hbsdk.get_balance().then((data)=>{
         if (!data) {
-            callback && callback()
+            callback && callback('没有数据', myBalance, usdCnyRate)
             return
         }
         data.list.map((item) => {
-            if (item.currency === 'btc' && item.type === 'trade') {
-                myBalance = item.balance
+            if (item.type === 'trade' && item.balance !== '0.000000000000000000') {
+                myBalance.unshift({
+                    currency: item.currency,
+                    balance: item.balance
+                })
             }
         })
 
-        // 获取比特币美元汇率
-        getLastestBTCUSDT().then(closePrice => {
-            btcusdt = closePrice
+        myBalance.map((item) => {
+            // 获取币价格
+            getLastestPrice(`${item.currency}usdt`).then(closePrice => {
+                item.price = closePrice
 
-            // 获取人民币美元汇率
-            getLatestUsdCnyRate().then(latestUsdCnyRate => {
-                usdCnyRate = latestUsdCnyRate
-                let myFinance = `￥${(myBalance * btcusdt * usdCnyRate).toFixed(0)}`
+                finish = finish + 1
 
-                callback && callback(myFinance, myBalance, btcusdt, usdCnyRate)
+                // 计算全部币转换为人民币后的价格
+                total = total + parseInt((item.balance * item.price * usdCnyRate).toFixed(0), 10)
+
+                if (finish === myBalance.length) {
+                    callback && callback(`￥${total}`, myBalance, usdCnyRate)
+                }
+
             }).catch(ex => {
-                callback && callback('获取人民币美元汇率出错')
+                callback && callback('获取比特币美元汇率出错', myBalance, usdCnyRate)
                 return
-            });
-        }).catch(ex => {
-            callback && callback('获取比特币美元汇率出错')
-            return
-        });
+            })
+        })
+
     }).catch(ex => {
-        callback && callback('获取账户比特币资产出错')
+        callback && callback('获取账户比特币资产出错', myBalance, usdCnyRate)
         return
-    });
+    })
 
 
     // hbsdk.get_open_orders('btcusdt').then((data) => {
