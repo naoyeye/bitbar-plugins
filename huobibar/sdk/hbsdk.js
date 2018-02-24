@@ -1,3 +1,4 @@
+/* eslint-disable */
 var config = require('../config/default.json');
 var CryptoJS = require('crypto-js');
 var Promise = require('bluebird');
@@ -51,7 +52,6 @@ function call_api(method, path, payload, body) {
     return new Promise(resolve => {
         var account_id = config.huobi.account_id_pro;
         var url = `https://${URL_HUOBI_PRO}${path}?${payload}`;
-        // console.log(url);
         var headers = DEFAULT_HEADERS;
         headers.AuthData = get_auth();
 
@@ -65,11 +65,11 @@ function call_api(method, path, payload, body) {
                     // console.log(json.data);
                     resolve(json.data);
                 } else {
-                    // console.log('调用错误', json);
+                    console.log('调用错误', json);
                     resolve(null);
                 }
             }).catch(ex => {
-                // console.log(method, path, '异常', ex);
+                console.log(method, path, '异常', ex);
                 resolve(null);
             });
         } else if (method == 'POST') {
@@ -82,11 +82,11 @@ function call_api(method, path, payload, body) {
                     // console.log(json.data);
                     resolve(json.data);
                 } else {
-                    // console.log('调用错误', json);
+                    console.log('调用错误', json);
                     resolve(null);
                 }
             }).catch(ex => {
-                // console.log(method, path, '异常', ex);
+                console.log(method, path, '异常', ex);
                 resolve(null);
             });
         }

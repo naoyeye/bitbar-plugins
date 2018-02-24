@@ -15,15 +15,16 @@ const huobibar = require('./huobibar')
 let coinList = ''
 
 huobibar.run(function(total, myBalance, usdCnyRate) {
+  if (!total || !myBalance || !usdCnyRate) {
+    bitbar([
+      '出错了'
+    ])
+    return
+  }
 
   myBalance.map((item) => {
     coinList += `我有 ${parseFloat(item.balance).toFixed(8)} 个 ${item.currency} 币\n价值 ${item.balance * item.price * usdCnyRate} 元\n${item.currency.toUpperCase()}/USDT：$${item.price}\n`
   })
-
-  if (!total) {
-    return
-  }
-
 
   bitbar([
     {
