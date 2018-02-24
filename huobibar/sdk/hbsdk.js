@@ -65,11 +65,11 @@ function call_api(method, path, payload, body) {
                     // console.log(json.data);
                     resolve(json.data);
                 } else {
-                    console.log('调用错误', json);
+                    // console.log('调用错误', json);
                     resolve(null);
                 }
             }).catch(ex => {
-                console.log(method, path, '异常', ex);
+                // console.log(method, path, '异常', ex);
                 resolve(null);
             });
         } else if (method == 'POST') {
@@ -86,7 +86,7 @@ function call_api(method, path, payload, body) {
                     resolve(null);
                 }
             }).catch(ex => {
-                console.log(method, path, '异常', ex);
+                // console.log(method, path, '异常', ex);
                 resolve(null);
             });
         }
