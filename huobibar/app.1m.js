@@ -66,7 +66,7 @@ huobibar.getAccountIdPro((resp) => {
         }
 
         myBalance.map((item) => {
-          coinList += `我有 ${parseFloat(item.balance).toFixed(8)} 个 ${item.currency} 币\n价值 ${item.balance * item.price} 元 \n${item.currency.toUpperCase()}/CNY ￥${item.price}\n`
+          coinList += `我有 ${parseFloat(item.balance).toFixed(8)} 个 ${item.currency} 币 | color=red \n价值 ${item.balance * item.price} 元 | color=yellow \n${item.currency.toUpperCase()}/CNY ￥${item.price} | color=blue \n`
         })
 
         bitbar([
@@ -82,8 +82,6 @@ huobibar.getAccountIdPro((resp) => {
           {
             text: coinList
           },
-          bitbar.sep,
-          // `美元人民币：${usdCnyRate}`,
           bitbar.sep,
           {
             text: '查看行情',
