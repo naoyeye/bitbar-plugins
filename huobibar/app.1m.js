@@ -69,6 +69,8 @@ huobibar.getAccountIdPro((resp) => {
           coinList += `我有 ${parseFloat(item.balance).toFixed(8)} 个 ${item.currency} 币 | color=red \n价值 ${item.balance * item.price} 元 | color=yellow \n${item.currency.toUpperCase()}/CNY ￥${item.price} | color=blue \n`
         })
 
+        coinList.substr(0, coinList.length - 3)
+
         bitbar([
           {
             text: total || '出错了',
@@ -80,7 +82,8 @@ huobibar.getAccountIdPro((resp) => {
           },
           bitbar.sep,
           {
-            text: coinList
+            text: coinList,
+            dropdown: false
           },
           bitbar.sep,
           {
