@@ -66,7 +66,7 @@ huobibar.getAccountIdPro((resp) => {
         }
 
         myBalance.map((item) => {
-          coinList += `我有 ${parseFloat(item.balance).toFixed(8)} 个 ${item.currency} 币\n价值 ${item.balance * item.price} 元 \n${item.currency.toUpperCase()}/CNY$${item.price}\n`
+          coinList += `我有 ${parseFloat(item.balance).toFixed(8)} 个 ${item.currency} 币\n价值 ${item.balance * item.price} 元 \n${item.currency.toUpperCase()}/CNY ￥${item.price}\n`
         })
 
         bitbar([
