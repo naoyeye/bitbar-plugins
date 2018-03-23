@@ -12,14 +12,8 @@ let usdCnyRate = 0
 let total = 0
 let finish = 0
 
-// https://api.coinmarketcap.com/v1/ticker/eos/?convert=CNY
-
-// var proxy = httpProxy.createProxyServer({
-//     target: 'http://127.0.0.1:1087'
-// })
 
 function getLastestPrice(symbol) {
-    // console.log(`getLastestPrice ${symbol} !!!`)
 
     return new Promise((resolve, reject) => {
 
@@ -72,9 +66,6 @@ function getLatestUsdCnyRate() {
 
 
 function getAccountIdPro(callback) {
-    // console.log('getAccountIdPro 1 ')
-    // console.log('config.huobi.account_id_pro = ', !config.huobi.account_id_pro || config.huobi.account_id_pro === 'replace_me')
-
     if (!config.huobi.account_id_pro || config.huobi.account_id_pro === 'replace_me') {
         // console.log('getAccountIdPro 2 ')
         hbsdk.get_account().then((data) => {
@@ -99,23 +90,6 @@ function getAccountIdPro(callback) {
 }
 
 function run(callback) {
-    // // 获取人民币美元汇率
-    // // console.log('获取人民币美元汇率 1')
-    // getLatestUsdCnyRate().then(latestUsdCnyRate => {
-    //     // console.log('latestUsdCnyRate 结果 = ', latestUsdCnyRate)
-    //     if (latestUsdCnyRate) {
-    //         usdCnyRate = latestUsdCnyRate
-    //         // console.log('next!!')
-    //         next()
-
-    //     } else {
-    //         callback && callback('获取人民币美元汇率出错 1', myBalance, accountIdPro)
-    //         return
-    //     }
-    // });
-
-
-    // console.log('获取账户Balance - ')
     // 获取账户Balance
     hbsdk.get_balance().then((data)=>{
         if (!data) {
@@ -141,14 +115,8 @@ function run(callback) {
 
                 // console.log('closePrice = ', closePrice)
 
-                // if (!closePrice) {
-                //     callback && callback('获取币价格出错', myBalance, accountIdPro)
-                //     return;
-                // }
-
                 item.price = closePrice
                 finish = finish + 1
-
 
                 // 计算全部币转换为人民币后的价格
                 total = total + parseInt((item.balance * item.price).toFixed(0), 10)
